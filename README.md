@@ -1,2 +1,123 @@
-# social-network-app
-Prototipo en React Native para la app Social Network
+# **Plan de Trabajo – Social Network App (React Native)**
+
+**Equipo:**  
+- **Nick** (PM / Integrador)  
+- **Felipe** (Auth + CRUD)  
+- **Uziel** (UI + Perfil)  
+- **Jorge** (Social + QA)
+
+**Entrega oficial:** 30 de noviembre  
+**Meta interna:** 24 de noviembre  
+
+---
+
+## **📅 Cronograma General**
+
+| Semana | Objetivo general | Enfoque de cada integrante |
+|:--|:--|:--|
+| **5–9 nov** | Setup, arquitectura y pruebas base | Nick y Uziel → estructura del proyecto + UI inicial. <br>Felipe → endpoints de auth (signup/login). <br>Jorge → pruebas con API (likes/follows dummy) y testing de requests. |
+| **10–14 nov** | Feed y CRUD de posts | Nick → Feed general y componente PostCard. <br>Felipe → CRUD (create/update/delete). <br>Uziel → navegación y diseño de pantallas (Feed + PostEditor). <br>Jorge → testing de likes reales con posts creados. |
+| **15–19 nov** | Perfil, follows y feed de usuarios seguidos | Uziel → Perfil de usuario + posts por usuario. <br>Jorge → Follow/Unfollow funcional. <br>Nick → Feed personalizado (`/api/feed`). <br>Felipe → soporte de endpoints y corrección de auth. |
+| **20–24 nov** | Integración final y pruebas cruzadas | Todos prueban módulos ajenos, corrigen errores y documentan. <br>Nick → documentación y demo final. |
+| **25–30 nov** | Colchón y entrega final | QA, revisión visual, pulido y entrega en Canvas. |
+
+---
+
+## **👥 Roles y Responsabilidades**
+
+| Integrante | Rol | Responsabilidades | Entregables |
+|:--|:--|:--|:--|
+| **Nick** | PM / Integrador | • Coordinar versiones, revisiones y merges.<br>• Implementar feed global y personalizado.<br>• Crear componentes comunes (PostCard, headers).<br>• Consolidar documentación. | - `/api/posts` y `/api/feed` funcionales.<br>- Componente PostCard.js.<br>- README técnico y plan de entrega. |
+| **Felipe** | Auth + CRUD | • Desarrollar Login y Signup (tokens JWT).<br>• CRUD completo de posts.<br>• Validar endpoints y flujos de autenticación. | - Pantallas Login/Signup funcionales.<br>- Crear/Editar/Borrar posts.<br>- Auth integrado globalmente. |
+| **Uziel** | UI + Perfil | • Definir navegación general (stack, tabs).<br>• Desarrollar pantalla de perfil.<br>• Integrar `/api/users/:id` y `/api/users/:id/posts`. | - Perfil funcional con sus posts.<br>- AppNavigator.js operativo.<br>- Diseño uniforme entre pantallas. |
+| **Jorge** | Social + QA | • Implementar likes y follows/unfollows.<br>• Testing general de endpoints y bugs.<br>• Crear botones dinámicos (estado visual de like/follow). | - Like/Unlike y Follow/Unfollow.<br>- Reporte de pruebas.<br>- Ajustes de validación de API. |
+
+---
+
+## **🧩 División de Servicios y Deadlines**
+
+| Servicio | Endpoint | Responsable | Fecha límite |
+|:--|:--|:--|:--|
+| Signup | `/api/auth/signup` | Felipe | **8 nov** |
+| Login | `/api/auth/login` | Felipe | **8 nov** |
+| Feed general | `/api/posts?page=1&limit=10` | Nick | **11 nov** |
+| Feed de seguidos | `/api/feed` | Nick | **17 nov** |
+| Crear post | `POST /api/posts` | Felipe | **12 nov** |
+| Editar/Borrar post | `PATCH/DELETE /api/posts/:id` | Felipe | **14 nov** |
+| Likes | `PUT/DELETE /api/posts/:id/like` | Jorge | **13 nov** |
+| Follow/Unfollow | `PUT/DELETE /api/users/:id/follow` | Jorge | **18 nov** |
+| Perfil usuario | `GET /api/users/:id` | Uziel | **15 nov** |
+| Posts de usuario | `GET /api/users/:id/posts` | Uziel | **15 nov** |
+
+---
+
+## **🔗 Dependencias Técnicas**
+
+| Módulo | Depende de | Responsable previo |
+|:--|:--|:--|
+| Feed general (`/api/posts`) | API activa + Auth funcional | Felipe |
+| Feed personalizado (`/api/feed`) | Follow funcional | Jorge |
+| Perfil de usuario | Auth activo | Felipe |
+| Likes / Follows | CRUD de posts funcional | Felipe |
+| Testing final | Todos los módulos integrados | Equipo completo |
+
+---
+
+## **🗂️ Estructura del Proyecto (Asignada)**
+
+```
+
+/social-network-app
+├── /src
+│   ├── /screens
+│   │   ├── LoginScreen.js          ← Felipe
+│   │   ├── SignupScreen.js         ← Felipe
+│   │   ├── FeedScreen.js           ← Nick
+│   │   ├── ProfileScreen.js        ← Uziel
+│   │   └── PostEditorScreen.js     ← Felipe
+│   ├── /components
+│   │   ├── PostCard.js             ← Nick
+│   │   ├── LikeButton.js           ← Jorge
+│   │   ├── FollowButton.js         ← Jorge
+│   │   └── Header.js               ← Nick
+│   ├── /api
+│   │   ├── auth.js                 ← Felipe
+│   │   ├── posts.js                ← Nick
+│   │   └── users.js                ← Uziel
+│   └── AppNavigator.js             ← Uziel
+├── package.json
+├── README.md
+└── .env
+
+```
+
+---
+
+## **✅ Checkpoints de Avance**
+
+| Fecha | Revisión | Objetivo |
+|:--|:--|:--|
+| **8 nov** | Checkpoint 1 | Login y Signup operativos con token. |
+| **13 nov** | Checkpoint 2 | CRUD de posts y likes integrados. |
+| **17 nov** | Checkpoint 3 | Feed personalizado y perfil funcional. |
+| **22 nov** | Checkpoint 4 | Testing, fixes y documentación. |
+| **24 nov** | Versión final interna | Demo funcional lista. |
+
+---
+
+## **🧭 Criterios de Éxito**
+
+- Todas las rutas del API responden correctamente desde la app.  
+- Navegación fluida entre pantallas.  
+- Acciones protegidas con token JWT.  
+- Interfaz coherente (mismo diseño y estilo).  
+- Sin errores críticos ni crashes durante el demo.
+
+---
+
+**Última actualización:** 5 de noviembre de 2025  
+```
+
+---
+
+¿Quieres que te lo prepare también en una **versión visual Gantt (barra de tiempos con dependencias)** en Markdown o prefieres que te genere un **.png tipo diagrama** para añadir al repo (en `/docs/`)?
