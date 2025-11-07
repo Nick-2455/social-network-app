@@ -12,6 +12,59 @@
 ---
 <img width="767" height="672" alt="Captura de pantalla 2025-11-05 a la(s) 9 56 31 p m" src="https://github.com/user-attachments/assets/667cbf22-1a5d-4c6b-9ae1-9f1cc907974c" />
 
+
+##  Arquitectura del Proyecto
+
+Este proyecto sigue una **arquitectura monolítica modular (MVC)**, ideal para equipos pequeños y desarrollo ágil.  
+Todo el backend se maneja dentro de una sola aplicación estructurada por módulos (Auth, Usuarios, Posts, etc.), conectada a una base de datos común.
+
+---
+
+###  Estructura general
+
+```
+red-social/
+│
+├── frontend/                 # Interfaz del usuario (React / React Native / Flutter)
+│
+├── backend/
+│   ├── src/
+│   │   ├── app.js            # Configuración principal (Express)
+│   │   ├── routes/           # Definición de rutas y endpoints
+│   │   │   ├── auth.routes.js
+│   │   │   ├── user.routes.js
+│   │   │   ├── post.routes.js
+│   │   │   └── comment.routes.js
+│   │   ├── controllers/      # Lógica de cada endpoint
+│   │   ├── models/           # Modelos (ORM / esquema de DB)
+│   │   ├── services/         # Reglas de negocio y funciones auxiliares
+│   │   ├── middlewares/      # Autenticación, validaciones, permisos
+│   │   └── config/           # Configuración de base de datos y variables de entorno
+│   │
+│   ├── package.json
+│   └── ...
+│
+└── database/
+└── red_social.sql (o scripts de migración)
+```
+
+---
+
+### Buenas prácticas
+
+- Uso de variables de entorno (`.env`) para credenciales y claves.
+- Endpoints documentados con Swagger o Postman.
+- Ramas por funcionalidad en Git (ej. `feature/auth`, `feature/posts`).
+- Archivo `README.md` con instrucciones de instalación y ejecución.
+- Código limpio y organizado por capas (MVC).
+
+
+---
+
+¿Quieres que te agregue al bloque también una **sección de instalación y ejecución** (comandos para levantar el backend y frontend)?
+Así lo puedes pegar al final del README y quedaría completo.
+
+
 ## **📅 Cronograma General**
 
 | Semana | Objetivo general | Enfoque de cada integrante |
