@@ -31,3 +31,61 @@ export async function createPost(content, image) {
     throw error;
   }
 }
+
+// Editar un post
+export async function editPost(id, content, image){
+  try{
+    const response = await authService.authenticatedRequest(
+      `/posts/${id}`,
+      "PATCH",
+      {content, image}
+    );
+    return response;
+  } catch (error){
+    console.log("Error editPost", error);
+    throw error;
+  }
+}
+
+export async function deletePost(id){
+  try{
+    const response = await authService.authenticatedRequest(
+      `/posts/${id}`,
+      "DELETE",
+      {}
+    );
+    return response;
+  } catch (error){
+    console.log("Error deltePost", error);
+    throw error;
+  }
+}
+
+export async function likePost(id){
+  try{
+    const response = await authService.authenticatedRequest(
+      `/posts/${id}/like`,
+      "PUT",
+      {}
+    )
+    return response;
+
+  } catch (error){
+    console.log("Error likePost", error);
+    throw error;
+  }
+}
+
+export async function unLikePost(id){
+  try{
+    const response = await authService.authenticatedRequest(
+      `/posts/${id}/like`,
+      'DELETE',
+      {}
+    )
+    return response;
+  } catch (error){
+    console.log("Error unLikePost", error);
+    throw error;
+  }
+}
