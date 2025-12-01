@@ -13,6 +13,8 @@ import {
 
 import authService from '../utils/auth';
 
+import Logo from './components/logo'
+
 console.log("AUTH:", authService);
 
 export default function LoginScreen({ navigation, onLoginSuccess }) {
@@ -100,11 +102,9 @@ export default function LoginScreen({ navigation, onLoginSuccess }) {
     >
       <View style={styles.content}>
         <View style={styles.logoContainer}>
-          <Text style={styles.logo}>📱</Text>
-          <Text style={styles.appName}>Social Network</Text>
+          <Logo />
         </View>
-
-        <Text style={styles.title}>Iniciar Sesión</Text>
+        <Text style={styles.title}>{'Iniciar Sesión'}</Text>
         <Text style={styles.subtitle}>Bienvenido de vuelta</Text>
 
         <TextInput
@@ -135,7 +135,7 @@ export default function LoginScreen({ navigation, onLoginSuccess }) {
           style={styles.linkButton}
         >
           <Text style={styles.linkText}>
-            ¿No tienes cuenta? <Text style={styles.linkTextBold}>Regístrate</Text>
+            {"¿No tienes cuenta?"} <Text style={styles.linkTextBold}>{"Regístrate"}</Text>
           </Text>
         </TouchableOpacity>
       </View>

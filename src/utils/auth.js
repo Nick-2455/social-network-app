@@ -106,6 +106,15 @@ class AuthServices {
     }
   }
 
+  async getCurrentUserId(){
+    try{
+      const userData = await this.getCurrentUserId();
+      return userData?.id || userData?.userId|| null;
+    } catch (error){
+      console.error('Error obteniendo ID de usuario', error);
+      return null;
+    }
+  }
   // --------------------------
   // 🟦 SIGNUP
   // --------------------------

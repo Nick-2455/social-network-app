@@ -14,6 +14,8 @@ import {
 
 import authService from '../utils/auth';
 
+import Logo from './components/logo';
+
 export default function SignupScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -119,12 +121,11 @@ export default function SignupScreen({ navigation }) {
         <View style={styles.content}>
 
           <View style={styles.logoContainer}>
-            <Text style={styles.logo}>📱</Text>
-            <Text style={styles.appName}>Social Network</Text>
+            <Logo />
           </View>
 
           <Text style={styles.title}>Crear Cuenta</Text>
-          <Text style={styles.subtitle}>Únete a la comunidad</Text>
+          <Text style={styles.subtitle}>{"Únete a la comunidad"}</Text>
 
           <TextInput
             style={styles.input}
@@ -154,6 +155,13 @@ export default function SignupScreen({ navigation }) {
             placeholderTextColor="#999"
           />
 
+          <View style={styles.passwordReq}>
+            <Text style={{fontWeight: "bold", paddingBottom: 10}}>{"La contraseña debe cumplir con:"}</Text>
+            <Text style={styles.passwordReqText}>{"- Mínimo 8 caracteres."}</Text>
+            <Text style={styles.passwordReqText}>{"- Mínimo un caracter en mayúscula."}</Text>
+            <Text style={styles.passwordReqText}>{"- Mínimo un símbolo como @."}</Text>
+          </View>
+
           <TouchableOpacity style={styles.button} onPress={handleSignup}>
             <Text style={styles.buttonText}>Crear Cuenta</Text>
           </TouchableOpacity>
@@ -163,7 +171,7 @@ export default function SignupScreen({ navigation }) {
             onPress={() => navigation.navigate('Login')}
           >
             <Text style={styles.linkText}>
-              ¿Ya tienes cuenta? <Text style={styles.linkTextBold}>Inicia sesión</Text>
+              {"¿Ya tienes cuenta?"} <Text style={styles.linkTextBold}>{'Inicia sesión'}</Text>
             </Text>
           </TouchableOpacity>
 
@@ -206,4 +214,6 @@ const styles = StyleSheet.create({
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   loadingText: { marginTop: 16, fontSize: 18, fontWeight: '600' },
   progressText: { marginTop: 12, fontSize: 14, color: '#999' },
+  passwordReq: {marginHorizontal: 'auto', paddingBottom: 10},
+  passwordReqText: {color: '#444'}
 });
