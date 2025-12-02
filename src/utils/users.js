@@ -24,3 +24,23 @@ export async function unfollowUser(userId) {
     'DELETE'
   );
 }
+
+
+export async function isUserFollowed(userId) {
+  try {
+    const data = await AuthServices.authenticatedRequest(
+      `/users/${userId}`,
+      "GET"
+    );
+
+    if (typeof data?.is_following === "boolean") {
+      return data.is_following;
+    }
+
+    return false;
+  } catch (error) {
+    console.log("Error getIsUserFollowed:", error);
+    throw error;
+  }
+}
+

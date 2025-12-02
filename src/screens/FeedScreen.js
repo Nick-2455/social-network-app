@@ -12,6 +12,7 @@ import PostCard from './components/PostCard';
 import authService from '../utils/auth';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import BottomNav from './components/BottomNav';
+import { isUserFollowed} from '../utils/users';
 
 export default function FeedScreen({ navigation }) {
   const [posts, setPosts] = useState([]);
@@ -44,37 +45,41 @@ export default function FeedScreen({ navigation }) {
       const data = await getRecentPosts();
       console.log('📦 Posts recibidos:', data.length);
 
-      const postsWithLikeStatus = data.map((post) => {
+      const postsWithLikeStatus = await Promise.all(
+        data.map(async post => {
+    
         let likesArray = [];
-
+        
         if (Array.isArray(post.likes)) {
-          likesArray = post.likes.map((like) => {
+          likesArray = post.likes.map(like => {
+           
             if (typeof like === 'object' && like.user_id) {
               return like.user_id;
             }
-
+            
             if (typeof like === 'object' && like.id) {
               return like.id;
             }
 
             return like;
-          });
+        });
         }
 
-        const isLiked = likesArray.some(
-          (likeId) => String(likeId) === String(currentUserId)
-        );
+        
+        const isLiked = likesArray.some(likeId => String(likeId) === String(currentUserId));
 
-        console.log(
-          `Post ${post.id}: likes=[${likesArray}], isLiked=${isLiked}`
-        );
-
+        const isFollowed = await isUserFollowed(post.user_id);
+        
+        console.log(`Post ${post.id}: likes=[${likesArray}], isLiked=${isLiked}, user_id=${post.user_id}, isFollowed=${isFollowed}`);
+        
         return {
           ...post,
-          likes: likesArray,
+          likes: likesArray, 
           isLiked: isLiked,
+          isFollowed: isFollowed
         };
-      });
+      })
+      );
 
       setPosts(postsWithLikeStatus);
     } catch (error) {
