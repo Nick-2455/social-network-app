@@ -92,7 +92,7 @@ export default function SignupScreen({ navigation }) {
   if (!serverReady && !loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007AFF" />
+        <ActivityIndicator size="large" color="#ffe200" />
         <Text style={styles.loadingText}>Verificando servidor...</Text>
       </View>
     );
@@ -101,7 +101,7 @@ export default function SignupScreen({ navigation }) {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007AFF" />
+        <ActivityIndicator size="large" color="#ffe200" />
         <Text style={styles.loadingText}>Creando cuenta...</Text>
         {progress && (
           <Text style={styles.progressText}>
@@ -130,6 +130,7 @@ export default function SignupScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="Nombre de usuario"
+            color="white"
             value={username}
             onChangeText={setUsername}
             autoCapitalize="none"
@@ -139,6 +140,7 @@ export default function SignupScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="Email"
+            color="white"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -149,6 +151,7 @@ export default function SignupScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="Contraseña (mínimo 8 caracteres)"
+            color="white"
             value={password}
             onChangeText={setPassword}
             secureTextEntry
@@ -156,7 +159,7 @@ export default function SignupScreen({ navigation }) {
           />
 
           <View style={styles.passwordReq}>
-            <Text style={{fontWeight: "bold", paddingBottom: 10}}>{"La contraseña debe cumplir con:"}</Text>
+            <Text style={{color: '#fff', fontWeight: "bold", paddingBottom: 10}}>{"La contraseña debe cumplir con:"}</Text>
             <Text style={styles.passwordReqText}>{"- Mínimo 8 caracteres."}</Text>
             <Text style={styles.passwordReqText}>{"- Mínimo un caracter en mayúscula."}</Text>
             <Text style={styles.passwordReqText}>{"- Mínimo un símbolo como @."}</Text>
@@ -182,38 +185,36 @@ export default function SignupScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f5f5' },
-  scrollContent: { flexGrow: 1 },
+  container: { flex: 1, backgroundColor: '#111' },
   content: { flex: 1, justifyContent: 'center', padding: 24 },
   logoContainer: { alignItems: 'center', marginBottom: 40 },
-  logo: { fontSize: 60 },
-  appName: { fontSize: 24, fontWeight: 'bold', color: '#007AFF', marginBottom: 24 },
-  title: { fontSize: 32, fontWeight: 'bold', marginBottom: 8 },
-  subtitle: { fontSize: 16, color: '#666', marginBottom: 32 },
+  title: { color: '#fff', fontSize: 32, fontWeight: 'bold', marginBottom: 8 },
+  subtitle: { color: '#fff', fontSize: 16, marginBottom: 32 },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: '#222',
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderRadius: 12,
     marginBottom: 16,
     fontSize: 16,
     borderWidth: 1,
-    borderColor: '#e0e0e0',
+    borderColor: '#ccc',
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#ffe200',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
     marginTop: 8,
+    elevation: 4,
   },
-  buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  buttonText: { color: '#000', fontSize: 16, fontWeight: '600' },
   linkButton: { marginTop: 24, alignItems: 'center' },
-  linkText: { color: '#666' },
-  linkTextBold: { color: '#007AFF', fontWeight: '600' },
-  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingText: { marginTop: 16, fontSize: 18, fontWeight: '600' },
+  linkText: { color: '#ccc', fontSize: 14 },
+  linkTextBold: { color: '#ffe200', fontWeight: '600' },
+  loadingContainer: { backgroundColor: '#111', flex: 1, justifyContent: 'center', alignItems: 'center' },
+  loadingText: { color: '#fff', marginTop: 16, fontSize: 18, fontWeight: '600' },
   progressText: { marginTop: 12, fontSize: 14, color: '#999' },
   passwordReq: {marginHorizontal: 'auto', paddingBottom: 10},
-  passwordReqText: {color: '#444'}
+  passwordReqText: {color: '#fff'}
 });

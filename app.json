@@ -1,16 +1,17 @@
+
 {
   "expo": {
-    "name": "red-social",
-    "slug": "snack-29dec55b-7ed3-43c0-9da5-3a6c452fd48c",
+    "name": "socialnetworkui",
+    "slug": "snack-f8cc5b83-d64b-490b-8b60-f52fd89c6071",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#111"
     },
     "ios": {
       "supportsTablet": true
@@ -18,7 +19,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#111"
       },
       "edgeToEdgeEnabled": true
     },

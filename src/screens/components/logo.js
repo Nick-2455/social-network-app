@@ -11,13 +11,13 @@ export default Logo;
 
 const styles = StyleSheet.create({
   logoF: {
-    color: "#007AFF",
+    color: "#FFFFFF",
     fontSize: 90,
     fontWeight: "bold"
   },
 
   logoRest: {
-    color: "#007AFF",
+    color: "#FFFFFF",
     fontSize: 64,
     fontStyle: "italic"
   },
