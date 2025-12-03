@@ -137,7 +137,7 @@ export default function FeedScreen({ navigation }) {
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <Ionicons name="add-circle-outline" size={20} color="black" />
+            <Ionicons name="add-circle-outline" size={24} color="black" />
             <Text style={{ color: 'black', fontSize: 16, fontWeight: '600' }}>
               {' Crear nuevo post'}
             </Text>
