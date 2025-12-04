@@ -1,10 +1,26 @@
 // src/screens/components/PostCard.js
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, Modal, TextInput } from 'react-native';
-import {editPost, deletePost, likePost, unLikePost} from '../../utils/posts.js'
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Modal,
+  TextInput,
+} from 'react-native';
+import {
+  editPost,
+  deletePost,
+  likePost,
+  unLikePost,
+} from '../../utils/posts.js';
+import { followUser, unfollowUser, isUserFollowed } from '../../utils/users.js';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function PostCard({ post, posts, setPosts, currentUserId }) {
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -13,9 +29,9 @@ export default function PostCard({ post, posts, setPosts, currentUserId }) {
   // Formateo rápido de fecha
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("es-MX", {
-      hour: "2-digit",
-      minute: "2-digit",
+    return date.toLocaleDateString('es-MX', {
+      hour: '2-digit',
+      minute: '2-digit',
     });
   };
 
@@ -28,14 +44,16 @@ export default function PostCard({ post, posts, setPosts, currentUserId }) {
     if (editContent && editContent.trim()) {
       try {
         await editPost(post.id, editContent.trim(), null);
-        
-        setPosts(posts.map(p => {
-          if (p.id === post.id) {
-            return { ...p, content: editContent.trim() };
-          }
-          return p;
-        }));
-        
+
+        setPosts(
+          posts.map((p) => {
+            if (p.id === post.id) {
+              return { ...p, content: editContent.trim() };
+            }
+            return p;
+          })
+        );
+
         setIsEditModalVisible(false);
         Alert.alert('Éxito', 'Post editado correctamente');
       } catch (error) {
@@ -50,19 +68,24 @@ export default function PostCard({ post, posts, setPosts, currentUserId }) {
       'Eliminar Post',
       '¿Estás seguro de que quieres eliminar este post?',
       [
-        { text: 'Cancelar', style: 'cancel'},
-        { text: 'Eliminar', style: 'destructive',
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Eliminar',
+          style: 'destructive',
           onPress: async () => {
             try {
               await deletePost(postId);
-              setPosts(posts.filter(p => p.id !== postId));
+              setPosts(posts.filter((p) => p.id !== postId));
               Alert.alert('Éxito', 'Post eliminado correctamente');
             } catch (error) {
               console.error('Error al eliminar post: ', error);
-              Alert.alert('Error', 'No se pudo eliminar el post. Intenta de nuevo.');
+              Alert.alert(
+                'Error',
+                'No se pudo eliminar el post. Intenta de nuevo.'
+              );
             }
-          }
-        }
+          },
+        },
       ]
     );
   };
@@ -71,106 +94,201 @@ export default function PostCard({ post, posts, setPosts, currentUserId }) {
     try {
       if (post.isLiked) {
         await unLikePost(post.id);
-        setPosts(posts.map(p => {
-          if (p.id === post.id) {
-            return {
-              ...p,
-              isLiked: false,
-              likes: p.likes.filter(userId => userId !== currentUserId)
-            };
-          }
-          return p;
-        }));
+        setPosts(
+          posts.map((p) => {
+            if (p.id === post.id) {
+              return {
+                ...p,
+                isLiked: false,
+                likes: p.likes.filter((userId) => userId !== currentUserId),
+              };
+            }
+            return p;
+          })
+        );
       } else {
         await likePost(post.id);
-        setPosts(posts.map(p => {
-          if (p.id === post.id) {
-            return {
-              ...p,
-              isLiked: true,
-              likes: [...p.likes, currentUserId]
-            };
-          }
-          return p;
-        }));
+        setPosts(
+          posts.map((p) => {
+            if (p.id === post.id) {
+              return {
+                ...p,
+                isLiked: true,
+                likes: [...p.likes, currentUserId],
+              };
+            }
+            return p;
+          })
+        );
       }
     } catch (error) {
       console.error('Error al procesar like: ', error);
-      Alert.alert('Error', 'No se pudo actualizar el like. Intentalo de nuevo.');
+      Alert.alert(
+        'Error',
+        'No se pudo actualizar el like. Intentalo de nuevo.'
+      );
     }
   };
-  
+
+  const handleFollow = async (post) => {
+    try {
+      if (await isUserFollowed(post.user_id)) {
+        await unfollowUser(post.user_id);
+        setPosts(
+          posts.map((p) => {
+            if (p.user_id === post.user_id) {
+              return {
+                ...p,
+                isFollowed: false,
+              };
+            }
+            return p;
+          })
+        );
+      } else {
+        await followUser(post.user_id);
+        setPosts(
+          posts.map((p) => {
+            if (p.user_id === post.user_id) {
+              return {
+                ...p,
+                isFollowed: true,
+              };
+            }
+            return p;
+          })
+        );
+      }
+    } catch (error) {
+      console.error('Error al procesar follow: ', error);
+      Alert.alert(
+        'Error',
+        'No se pudo actualizar el follow. Intentalo de nuevo.'
+      );
+    }
+  };
+
   return (
     <View style={styles.card}>
-      {/* Username */}
-      <Text style={styles.username}>{"@"}{post.username}</Text>
-      
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        {/* Username */}
+        <Text style={styles.username}>
+          {'@'}
+          {post.username}
+        </Text>
+
+        {/* Boton Follow */}
+
+        <TouchableOpacity
+          style={styles.followButton}
+          onPress={() => handleFollow(post)}>
+          <Text style={styles.followButton}>
+            {post.isFollowed ? 'Siguiendo' : 'Seguir'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       {/* Content */}
       <Text style={styles.content}>{post.content}</Text>
-      
+
       {/* Fecha */}
       <Text style={styles.time}>{formatDate(post.created_at)}</Text>
-      
+
       {/* Likes */}
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.likeButton}
-        onPress={() => handleLike(post)}
-      >
+        onPress={() => handleLike(post)}>
         <Text style={styles.likes}>
-          {post.isLiked ? <FontAwesome name="heart" size={16} color="red" /> : <Feather name="heart" size={16} color="white" />} {post.likes.length} likes
+          {post.isLiked ? (
+            <FontAwesome name="heart" size={16} color="red" />
+          ) : (
+            <Feather name="heart" size={16} color="white" />
+          )}{' '}
+          {post.likes.length} likes
         </Text>
       </TouchableOpacity>
 
       {/* Botones de Editar y Eliminar */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity 
-          style={[styles.button, styles.editButton]}
-          onPress={() => handleEdit(post)}
-        >
-          <Text style={styles.buttonText}><Feather name="edit" size={16} color="black" /> Editar</Text>
-        </TouchableOpacity>
+      {post.user_id === currentUserId && (
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[styles.button, styles.editButton]}
+            onPress={() => handleEdit(post)}>
+            <Text style={styles.buttonText}>
+              <Feather name="edit" size={16} color="black" /> Editar
+            </Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={[styles.button, styles.deleteButton]}
-          onPress={() => handleDelete(post.id)}
-        >
-          <Text style={styles.buttonText}><AntDesign name="delete" size={16} color="black" /> Eliminar</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            style={[styles.button, styles.deleteButton]}
+            onPress={() => handleDelete(post.id)}>
+            <Text style={styles.buttonText}>
+              <AntDesign name="delete" size={16} color="black" /> Eliminar
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       {/* Modal de Edición */}
       <Modal
         visible={isEditModalVisible}
         transparent={true}
         animationType="fade"
-        onRequestClose={() => setIsEditModalVisible(false)}
-      >
+        onRequestClose={() => setIsEditModalVisible(false)}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Editar Post</Text>
-            
+
             <TextInput
               style={styles.modalInput}
               value={editContent}
               onChangeText={setEditContent}
               multiline
-              placeholder="Escribe tu post..."
+              numberOfLines={5}
+              placeholder="Escribe lo que tengas en mente..."
               placeholderTextColor="#999"
             />
-            
+
             <View style={styles.modalButtons}>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[styles.modalButton, styles.modalCancelButton]}
-                onPress={() => setIsEditModalVisible(false)}
-              >
-                <Text style={styles.modalButtonText}>Cancelar</Text>
+                onPress={() => setIsEditModalVisible(false)}>
+                <View style={{ marginHorizontal: 'auto' }}>
+                  <View
+                    style={{
+                      width: '100%',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
+                    <MaterialCommunityIcons
+                      name="cancel"
+                      size={20}
+                      color="black"
+                    />
+                    <Text style={styles.modalButtonText}>{" Cancelar"}</Text>
+                  </View>
+                </View>
               </TouchableOpacity>
-              
-              <TouchableOpacity 
+
+              <TouchableOpacity
                 style={[styles.modalButton, styles.modalSaveButton]}
-                onPress={saveEdit}
-              >
-                <Text style={styles.modalButtonText}>Guardar</Text>
+                onPress={saveEdit}>
+                <View style={{ marginHorizontal: 'auto' }}>
+                  <View
+                    style={{
+                      width: '100%',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
+                    <Ionicons name="save-sharp" size={20} color="black" />
+                    <Text style={styles.modalButtonText}>{" Guardar"}</Text>
+                  </View>
+                </View>
               </TouchableOpacity>
             </View>
           </View>
@@ -182,27 +300,27 @@ export default function PostCard({ post, posts, setPosts, currentUserId }) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#222",
+    backgroundColor: '#222',
     padding: 16,
     marginVertical: 10,
     marginHorizontal: 14,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#333",
+    borderColor: '#333',
   },
   username: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 15,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 8,
   },
   content: {
-    color: "#ddd",
+    color: '#ddd',
     fontSize: 16,
     marginBottom: 12,
   },
   time: {
-    color: "#777",
+    color: '#777',
     fontSize: 12,
   },
   likeButton: {
@@ -210,10 +328,10 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   likes: {
-    color: "#ffffff",
+    color: '#ffffff',
     fontSize: 14,
     marginTop: 6,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -227,6 +345,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 8,
     alignItems: 'center',
+  },
+  followButton: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '700',
+    marginBottom: 8,
   },
   editButton: {
     backgroundColor: '#ffffff',
@@ -261,14 +385,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalInput: {
-    backgroundColor: '#2a2a2a',
-    borderRadius: 8,
-    padding: 12,
     color: '#fff',
     fontSize: 16,
     minHeight: 100,
     textAlignVertical: 'top',
     marginBottom: 16,
+    backgroundColor: '#222',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
   modalButtons: {
     flexDirection: 'row',
@@ -281,13 +408,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalCancelButton: {
-    backgroundColor: '#555',
+    backgroundColor: '#fff',
   },
   modalSaveButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#ffe200',
   },
   modalButtonText: {
-    color: '#fff',
+    color: '#000',
     fontWeight: '600',
     fontSize: 16,
   },

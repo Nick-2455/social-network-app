@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -8,14 +7,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getRecentPosts } from '../utils/posts';
+import { getFollowedPosts } from '../utils/posts';
 import PostCard from './components/PostCard';
 import authService from '../utils/auth';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import BottomNav from './components/BottomNav';
-import { isUserFollowed} from '../utils/users';
+import { isUserFollowed } from '../utils/users';
 
-export default function FeedScreen({ navigation }) {
+export default function FollowedScreen({ navigation }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
@@ -43,43 +42,44 @@ export default function FeedScreen({ navigation }) {
 
     setLoading(true);
     try {
-      const data = await getRecentPosts();
+      const data = await getFollowedPosts();
       console.log('📦 Posts recibidos:', data.length);
 
       const postsWithLikeStatus = await Promise.all(
-        data.map(async post => {
-    
-        let likesArray = [];
-        
-        if (Array.isArray(post.likes)) {
-          likesArray = post.likes.map(like => {
-           
-            if (typeof like === 'object' && like.user_id) {
-              return like.user_id;
-            }
-            
-            if (typeof like === 'object' && like.id) {
-              return like.id;
-            }
+        data.map(async (post) => {
+          let likesArray = [];
 
-            return like;
-        });
-        }
+          if (Array.isArray(post.likes)) {
+            likesArray = post.likes.map((like) => {
+              if (typeof like === 'object' && like.user_id) {
+                return like.user_id;
+              }
 
-        
-        const isLiked = likesArray.some(likeId => String(likeId) === String(currentUserId));
+              if (typeof like === 'object' && like.id) {
+                return like.id;
+              }
 
-        const isFollowed = await isUserFollowed(post.user_id);
-        
-        console.log(`Post ${post.id}: likes=[${likesArray}], isLiked=${isLiked}, user_id=${post.user_id}, isFollowed=${isFollowed}`);
-        
-        return {
-          ...post,
-          likes: likesArray, 
-          isLiked: isLiked,
-          isFollowed: isFollowed
-        };
-      })
+              return like;
+            });
+          }
+
+          const isLiked = likesArray.some(
+            (likeId) => String(likeId) === String(currentUserId)
+          );
+
+          const isFollowed = await isUserFollowed(post.user_id);
+
+          console.log(
+            `Post ${post.id}: likes=[${likesArray}], isLiked=${isLiked}, user_id=${post.user_id}, isFollowed=${isFollowed}`
+          );
+
+          return {
+            ...post,
+            likes: likesArray,
+            isLiked: isLiked,
+            isFollowed: isFollowed,
+          };
+        })
       );
 
       setPosts(postsWithLikeStatus);
@@ -109,41 +109,17 @@ export default function FeedScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#111' }}>
       <View>
-        <Text style={{
-          marginHorizontal: 'auto',
-          paddingVertical: 15,
-          color: "white",
-          fontSize: 36,
-          textAlign: "left",
+        <Text
+          style={{
+            marginHorizontal: 'auto',
+            paddingVertical: 15,
+            color: 'white',
+            fontSize: 36,
+            textAlign: 'left',
           }}>
-          {"Inicio"}
+          {'Seguidos'}
         </Text>
       </View>
-      <TouchableOpacity
-        style={{
-          width: '95%',
-          backgroundColor: '#ffe200',
-          padding: 14,
-          margin: 12,
-          borderRadius: 10,
-          alignItems: 'center',
-          marginHorizontal: 'auto',
-        }}
-        onPress={() => navigation.navigate('CreatePost')}>
-        <View style={{ marginHorizontal: 'auto' }}>
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Ionicons name="add-circle-outline" size={24} color="black" />
-            <Text style={{ color: 'black', fontSize: 16, fontWeight: '600' }}>
-              {' Crear nuevo post'}
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
 
       <FlatList
         data={posts}
