@@ -16,11 +16,11 @@ export default function BottomNav(props) {
         </View>
       </TouchableOpacity>
       <TouchableOpacity 
-        onPress={() => props.nav.navigate('Profile')}
+        onPress={() => props.nav.navigate('Followed')}
       >
         <View style={styles.navElement}>
           <AntDesign name="user" size={24} color="white" />
-          <Text style={styles.navText}>Perfil</Text>
+          <Text style={styles.navText}>Seguidos</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity 

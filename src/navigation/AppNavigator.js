@@ -4,6 +4,7 @@ import SignupScreen from '../screens/SignupScreen'
 import FeedScreen from '../screens/FeedScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import CreatePostScreen from "../screens/CreatePostScreen";
+import FollowedScreen from "../screens/FollowedScreen"
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
@@ -12,7 +13,7 @@ export default function AppNavigator() {
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup"component={SignupScreen} />
       <Stack.Screen name="Feed" component={FeedScreen} />
-      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="Followed" component={FollowedScreen} />
       <Stack.Screen name="CreatePost" component={CreatePostScreen} />
     </Stack.Navigator>
   );
