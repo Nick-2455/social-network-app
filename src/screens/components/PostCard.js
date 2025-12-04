@@ -1,21 +1,8 @@
 // src/screens/components/PostCard.js
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Alert,
-  Modal,
-  TextInput,
-} from 'react-native';
-import {
-  editPost,
-  deletePost,
-  likePost,
-  unLikePost,
-} from '../../utils/posts.js';
-import { followUser, unfollowUser, isUserFollowed } from '../../utils/users.js';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Modal, TextInput } from 'react-native';
+import {editPost, deletePost, likePost, unLikePost} from '../../utils/posts.js'
+import {followUser, unfollowUser, isUserFollowed} from '../../utils/users.js'
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -168,31 +155,56 @@ export default function PostCard({ post, posts, setPosts, currentUserId }) {
     }
   };
 
+
+  const handleFollow = async (post) => {
+    try {
+      if (await isUserFollowed(post.user_id)) {
+        await unfollowUser(post.user_id);
+        setPosts(posts.map(p => {
+          if (p.user_id === post.user_id) {
+            return {
+              ...p,
+              isFollowed: false,         
+            };
+          }
+          return p;
+        }));
+      } else {
+        await followUser(post.user_id);
+        setPosts(posts.map(p => {
+          if (p.user_id === post.user_id) {
+            return {
+              ...p,
+              isFollowed: true,         
+            };
+          }
+          return p;
+        }));
+      }
+    } catch (error) {
+      console.error('Error al procesar follow: ', error);
+      Alert.alert('Error', 'No se pudo actualizar el follow. Intentalo de nuevo.');
+    }
+  };
+  
   return (
     <View style={styles.card}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
+      <View style={{ flexDirection: 'row' , justifyContent: 'space-between', alignItems: 'center'}}>
         {/* Username */}
-        <Text style={styles.username}>
-          {'@'}
-          {post.username}
-        </Text>
+        <Text style={styles.username}>{"@"}{post.username}</Text>
 
         {/* Boton Follow */}
 
-        <TouchableOpacity
-          style={styles.followButton}
-          onPress={() => handleFollow(post)}>
+        <TouchableOpacity 
+            style={ styles.followButton}
+            onPress={() => handleFollow(post)}
+        >
           <Text style={styles.followButton}>
-            {post.isFollowed ? 'Siguiendo' : 'Seguir'}
+          {post.isFollowed ? 'Siguiendo' : 'Seguir'}
           </Text>
         </TouchableOpacity>
       </View>
-
+      
       {/* Content */}
       <Text style={styles.content}>{post.content}</Text>
 
@@ -218,18 +230,16 @@ export default function PostCard({ post, posts, setPosts, currentUserId }) {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.button, styles.editButton]}
-            onPress={() => handleEdit(post)}>
-            <Text style={styles.buttonText}>
-              <Feather name="edit" size={16} color="black" /> Editar
-            </Text>
+            onPress={() => handleEdit(post)}
+          >
+            <Text style={styles.buttonText}>✏️ Editar</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.button, styles.deleteButton]}
-            onPress={() => handleDelete(post.id)}>
-            <Text style={styles.buttonText}>
-              <AntDesign name="delete" size={16} color="black" /> Eliminar
-            </Text>
+            onPress={() => handleDelete(post.id)}
+          >
+            <Text style={styles.buttonText}>🗑️ Eliminar</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -347,9 +357,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   followButton: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 8,
   },
   editButton: {

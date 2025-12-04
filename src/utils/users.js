@@ -43,3 +43,4 @@ export async function isUserFollowed(userId) {
     throw error;
   }
 }
+
