@@ -6,7 +6,22 @@ const API_BASE_URL = "https://tec-social-network.onrender.com/api";
 export async function getRecentPosts() {
   try {
     const response = await authService.authenticatedRequest(
-      "/posts?page=1&limit=20",
+      "/posts?page=1&limit=35",
+      "GET"
+    );
+
+    return Array.isArray(response) ? response : [];
+  } catch (error) {
+    console.log("Error getRecentPosts:", error);
+    throw error;
+  }
+}
+
+// GET posts de usuarios seguidos
+export async function getFollowedPosts() {
+  try {
+    const response = await authService.authenticatedRequest(
+      "/feed?page=1&limit=25",
       "GET"
     );
 

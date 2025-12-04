@@ -24,9 +24,4 @@ const styles = StyleSheet.create({
   profileInfoContainer: {
     marginHorizontal: 'auto',
   },
-  /*
-  profileName: {
-    color: '#fff',
-    fontSize: 48,
-  },*/
 });
